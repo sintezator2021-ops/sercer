@@ -50,6 +50,6 @@ async def order(
 async def shutdown():
     await bot.session.close()
 
-# Запуск локально (на Render не використовується)
+# Локальний запуск (Render це ігнорує)
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000)
