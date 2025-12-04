@@ -8,7 +8,7 @@ from aiogram.client.session.aiohttp import AiohttpSession
 TOKEN = "8240464361:AAHB1ZBediNF3xN5gg23MwVzIohTyTteAl4"
 
 # Список ID отримувачів
-CHAT_IDS = [947916210, 592587618]
+CHAT_IDS = [947916210]
 
 # Створення сесії та бота
 session = AiohttpSession()
@@ -53,3 +53,4 @@ async def shutdown():
 # Локальний запуск (Render це ігнорує)
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000)
+
