@@ -1,0 +1,46 @@
+﻿from fastapi import FastAPI, Form
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from aiogram import Bot
+from aiogram.client.session.aiohttp import AiohttpSession
+
+# Вебхук: приймаємо дані з форми та шлемо їх у Telegram
+TOKEN = "8240464361:AAHB1ZBediNF3xN5gg23MwVzIohTyTteAl4"
+CHAT_ID = 947916210
+
+session = AiohttpSession()
+bot = Bot(TOKEN, session=session)
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/order")
+async def order(
+    name: str = Form(...),
+    phone: str = Form(...),
+    product: str = Form("кільця"),
+):
+    text = (
+        "Нове замовлення:\n"
+        f"Товар: {product}\n"
+        f"Ім'я: {name}\n"
+        f"Телефон: {phone}"
+    )
+    await bot.send_message(CHAT_ID, text)
+    return {"status": "ok"}
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await bot.session.close()
+
+
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="0.0.0.0", port=8000)
