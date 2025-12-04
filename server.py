@@ -6,7 +6,8 @@ from aiogram.client.session.aiohttp import AiohttpSession
 
 # Вебхук: приймаємо дані з форми та шлемо їх у Telegram
 TOKEN = "8240464361:AAHB1ZBediNF3xN5gg23MwVzIohTyTteAl4"
-CHAT_ID = 947916210
+CHAT_IDS = [947916210, 592587618]
+
 
 session = AiohttpSession()
 bot = Bot(TOKEN, session=session)
@@ -44,3 +45,4 @@ async def shutdown():
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000)
+
