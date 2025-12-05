@@ -16,7 +16,7 @@ bot = Bot(TOKEN, session=session)
 
 app = FastAPI()
 
-# Дозволяємо запити з будь-якого сайту (CORS)
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,7 +25,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Маршрут прийому замовлень
+# === KEEP-ALIVE ПІНГ ===
+@app.get("/ping")
+async def ping():
+    return {"status": "alive"}
+
+
+# === ПРИЙОМ ЗАМОВЛЕНЬ ===
 @app.post("/order")
 async def order(
     name: str = Form(...),
@@ -39,18 +45,18 @@ async def order(
         f"Телефон: {phone}"
     )
 
-    # Розсилка всім отримувачам
     for cid in CHAT_IDS:
         await bot.send_message(cid, text)
 
     return {"status": "ok"}
 
-# Закриття сесії при завершенні роботи сервера
+
+# Закриття сесії при завершенні
 @app.on_event("shutdown")
 async def shutdown():
     await bot.session.close()
 
-# Локальний запуск (Render це ігнорує)
+
+# Локальний запуск
 if __name__ == "__main__":
     uvicorn.run("server:app", host="0.0.0.0", port=8000)
-
